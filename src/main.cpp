@@ -85,11 +85,17 @@ public:
     tag tagData;
     vector<Node*> child;
     Node(tag);
+    void AddChild(Node*);
 };
 
 Node::Node(tag data)
 {
     this->tagData=data;
+}
+
+void Node::AddChild(Node* kid)
+{
+    this->child.push_back(kid);
 }
 
 void LevelOrderTraversal(Node* root)
@@ -100,21 +106,19 @@ void LevelOrderTraversal(Node* root)
     list<Node*> queue;
     queue.push_back(root);
     Node* curr = nullptr;
-    string name;
     while(queue.size())
     {
         curr = queue.front();
         queue.pop_front();
-
         cout<<curr->tagData<<" ";
-        name+=curr->tagData.tagName+".";
         for(int i=0;i<curr->child.size();i++)
         {
             queue.push_back(curr->child.at(i));
         }
     }
-    cout<<name;
 }
+
+Node* FormatTags(std::vector<tag>);
 
 int main() 
 {
@@ -129,13 +133,9 @@ int main()
         tags.push_back(inputTag);
     }
     tags.erase(tags.begin());
-    
-    Node* root = new Node(tag("a",{}));
-    root->child.push_back(new Node(tag("b",{})));
-    root->child.push_back(new Node(tag("c",{})));
-    root->child.push_back(new Node(tag("d",{})));
-    root->child[0]->child.push_back(new Node(tag("e",{})));
-    LevelOrderTraversal(root);
+
+    Node* tagRoot = FormatTags(tags);
+    LevelOrderTraversal(tagRoot);
 
     /*
     for(int i=tags.size()-1;i>0;i--)
@@ -156,4 +156,18 @@ int main()
     */
 
     return 0;
+}
+
+
+
+Node* FormatTags(std::vector<tag> ftags)
+{
+    if(ftags.empty())
+      return nullptr;
+    Node* root = new Node(ftags.front());
+    for(int i=1;i<ftags.size();i++)
+    {
+        
+    }
+    return root;
 }
