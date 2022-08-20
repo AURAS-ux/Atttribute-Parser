@@ -1,10 +1,10 @@
 #include <cmath>
-#include <cstdio>
 #include <vector>
 #include <iostream>
 #include <algorithm>
-#include<string>
-#include<list>
+#include <string>
+#include <list>
+
 using namespace std;
 
 class tag
@@ -86,6 +86,18 @@ public:
     vector<Node*> child;
     Node(tag);
     void AddChild(Node*);
+    Node(const Node& other)
+    {
+        this->tagData = other.tagData;
+        this->child = other.child;
+    }
+    Node& operator=(Node& other)
+    {
+        std::swap(this->tagData,other.tagData);
+        std::swap(this->child,other.child);
+        return *this;
+    }
+
 };
 
 Node::Node(tag data)
@@ -118,7 +130,22 @@ void LevelOrderTraversal(Node* root)
     }
 }
 
-Node* FormatTags(std::vector<tag>);
+Node* FormatTags(std::vector<tag> ftags)
+{
+    if(ftags.empty())
+      return nullptr;
+    Node* frontNode = new Node(ftags.front());
+    Node* currentNode = frontNode;
+    for(int i=1;i<ftags.size();i++)
+    {
+        if(ftags.at(i).tagName.find("/") == string::npos)
+        {
+            currentNode->AddChild(new Node(ftags[i]));
+            currentNode = currentNode->child[0];
+        }
+    }
+    return frontNode;
+}
 
 int main() 
 {
@@ -154,20 +181,6 @@ int main()
     check for tag name
     if found call ProccesQU func : params - tag.atributes
     */
-
+    system("pause");
     return 0;
-}
-
-
-
-Node* FormatTags(std::vector<tag> ftags)
-{
-    if(ftags.empty())
-      return nullptr;
-    Node* root = new Node(ftags.front());
-    for(int i=1;i<ftags.size();i++)
-    {
-        
-    }
-    return root;
 }
